@@ -1,0 +1,57 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Mapstraction Examples - bing v7</title>
+<script type="text/javascript" src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAAY70wuSo0zF3ZtJVp5bDm1BS1Y2ErAqCHV5rDhHSzgjy23KqwdRRaoSBuZk72oDzzAYxVBjtsLqSmTw"></script>
+<script type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+<script src="../source/mxn.js?(bingv7)" type="text/javascript"></script> 
+<style type="text/css">
+#mapdiv {
+  height: 400px;
+}
+</style> 
+<script type="text/javascript">
+//<![CDATA[
+
+var m;
+  function initialize() {
+
+      // create mxn object
+    m = new mxn.Mapstraction('mapdiv','bingv7', 123456);
+
+		
+
+  }
+  
+  function createPins(){
+	for (var i = 0; i<= 10000;i++){
+			
+		var lat = parseFloat(51.5 + (i * 0.01));
+				
+		var long = parseFloat(-0.09 + (i * 0.01));
+				
+		console.log(i);
+		
+  		var latlon = new mxn.LatLonPoint(lat, long)
+
+      	var marker = new mxn.Marker(latlon);
+		      
+      	m.addMarker(marker,true);  
+	}
+  }
+//]]>
+</script> 
+</head>
+<body >
+	<a onclick="initialize();">init</a>
+	<a onclick="createPins();">Click me</a>
+<div style="margin-top: 50px;
+width: 300px;height:200px;
+margin-left: auto;
+margin-right: auto;
+background-color: blue;">
+<div id="mapdiv" ></div>
+</div>
+
+</body>
+</html>
+
