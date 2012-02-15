@@ -11,33 +11,47 @@
 </style> 
 <script type="text/javascript">
 //<![CDATA[
+
+var m;
   function initialize() {
 
       // create mxn object
-      var m = new mxn.Mapstraction('mapdiv','bingv7');
+    m = new mxn.Mapstraction('mapdiv','bingv7', 123456);
 
+		
 
-     // m.addControls({zoom:'small'});
+  }
+  
+  function createPins(){
+	for (var i = 0; i<= 10000;i++){
+			
+		var lat = parseFloat(51.5 + (i * 0.01));
+				
+		var long = parseFloat(-0.09 + (i * 0.01));
+				
+		console.log(i);
+		
+  		var latlon = new mxn.LatLonPoint(lat, long)
 
-      var latlon = new mxn.LatLonPoint(51.53468413093941, -0.09026169776916504)
-
-      // put map on page
-      //m.setCenterAndZoom(latlon, 16);
-
-      // add a marker
-      var marker = new mxn.Marker(latlon);
-      m.addMarker(marker,true);    
+      	var marker = new mxn.Marker(latlon);
+		      
+      	m.addMarker(marker,true);  
+	}
   }
 //]]>
 </script> 
 </head>
-<body onload="initialize();">
-<center>
-<table border='1' width='50%'>
-<tr><td><div id="mapdiv"></div></td>
-</tr>
-</table>
-</center>
+<body >
+	<a onclick="initialize();">init</a>
+	<a onclick="createPins();">Click me</a>
+<div style="margin-top: 50px;
+width: 300px;height:200px;
+margin-left: auto;
+margin-right: auto;
+background-color: blue;">
+<div id="mapdiv" ></div>
+</div>
+
 </body>
 </html>
 

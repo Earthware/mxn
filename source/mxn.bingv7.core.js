@@ -3,14 +3,14 @@ mxn.register('bingv7', {
 Mapstraction: {
 	
 	init: function(element, api) {		
-		
+		console.log(key);
 		var me = this;
 		
 		if(Microsoft === undefined){
 			throw api + ' map script not imported';
 		}
 				
-		this.maps[api] = new Microsoft.Maps.Map(element,{credentials:"Bing Maps Key"}); 
+		this.maps[api] = new Microsoft.Maps.Map(element,{credentials:key}); 
 	},
 	
 	applyOptions: function(){
@@ -77,18 +77,21 @@ Mapstraction: {
 	},
 
 	removeMarker: function(marker) {
+		
 		var map = this.maps[this.api];
 		
 		map.entites.pop(marker);
 	},
 	
 	declutterMarkers: function(opts) {
+		
 		var map = this.maps[this.api];
 		
 		// TODO: Add provider code
 	},
 
 	addPolyline: function(polyline, old) {
+		
 		var map = this.maps[this.api];
 		var pl = polyline.toProprietary(this.api);
 		
@@ -98,6 +101,7 @@ Mapstraction: {
 	},
 
 	removePolyline: function(polyline) {
+		
 		var map = this.maps[this.api];
 		
 		// TODO: Add provider code
@@ -131,12 +135,14 @@ Mapstraction: {
 	},
 
 	setZoom: function(zoom) {
+		
 		var map = this.maps[this.api];
 		
 		map.setView({zoom: zoom});
 	},
 	
 	getZoom: function() {
+		
 		var map = this.maps[this.api];
 		var zoom;
 		
@@ -200,6 +206,7 @@ Mapstraction: {
 	},
 
 	getBounds: function () {
+		
 		var map = this.maps[this.api];
 		
 		var rect = map.getBounds();
@@ -217,40 +224,27 @@ Mapstraction: {
 		var ne = bounds.getNorthEast();
 		
 		map.setView({
-			
 			bounds: Microsoft.Maps.LocationRect.fromLocations([new Microsoft.Maps.Location(ne.lat, ne.lng), new Microsoft.Maps.Location(sw.lat, sw.lng)])
 		});
 	},
 
 	addImageOverlay: function(id, src, opacity, west, south, east, north, oContext) {
-		var map = this.maps[this.api];
-		
-		// TODO: Add provider code
 		
 		throw 'addImageOverlay cannot be implemented in the bing maps api';
 	},
 
 	setImagePosition: function(id, oContext) {
-		var map = this.maps[this.api];
-		var topLeftPoint; var bottomRightPoint;
-
-		// TODO: Add provider code
-
-		//oContext.pixels.top = ...;
-		//oContext.pixels.left = ...;
-		//oContext.pixels.bottom = ...;
-		//oContext.pixels.right = ...;
 		
 		throw 'setImagePosition cannot be implemented in the bing maps api';
 	},
 	
 	addOverlay: function(url, autoCenterAndZoom) {
-		var map = this.maps[this.api];
 		
-		// TODO: Add provider code
+		throw 'addOverlay cannot be implemented in the bing maps api';
 	},
 
 	addTileLayer: function(tile_url, opacity, copyright_text, min_zoom, max_zoom, map_type) {
+		
 		var map = this.maps[this.api];
 		
 		var options = {uriConstructor: tile_url, width: 256, height: 256};  
