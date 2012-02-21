@@ -3,14 +3,14 @@ mxn.register('bingv7', {
 Mapstraction: {
 	
 	init: function(element, api) {		
-		console.log(key);
+		//console.log(key);
 		var me = this;
 		
 		if(Microsoft === undefined){
 			throw api + ' map script not imported';
 		}
 				
-		this.maps[api] = new Microsoft.Maps.Map(element,{credentials:key}); 
+		this.maps[api] = new Microsoft.Maps.Map(element,{credentials:'key'}); 
 	},
 	
 	applyOptions: function(){
@@ -294,7 +294,7 @@ Marker: {
 	toProprietary: function() {
 		
 		var mmarker = new Microsoft.Maps.Pushpin(this.location.toProprietary('bingv7'));
-		
+				
 		var options = {	
 			anchor: this.iconAnchor ? new Microsoft.Maps.Point(this.iconAnchor[0], this.iconAnchor[1]) : undefined,
 			draggable: this.draggable,
@@ -304,7 +304,12 @@ Marker: {
 			width: this.iconSize ? this.iconSize[0] : undefined
 		};
 		
-		mmarker.setOptions(options);		
+		mmarker.setOptions(options);
+		
+		Microsoft.Maps.Events.addHandler(mmarker, 'click', function(){
+				
+				mmarker.mapstraction_marker.click.fire();
+			});
 		
 		return mmarker;
 	},
