@@ -25,7 +25,7 @@ var m;
   }
   
   function createPins(){
-	for (var i = 0; i<= 10000;i++){
+	for (var i = 0; i<= 10;i++){
 			
 		var lat = parseFloat(51.5 + (i * 0.01));
 				
@@ -36,14 +36,14 @@ var m;
   		var latlon = new mxn.LatLonPoint(lat, long)
 
       	var marker = new mxn.Marker(latlon);
-      	
+      	  	
       	marker.click.addHandler(function(){
       		alert('bing');
       	});
 		      
-      	m.addMarker(marker,true);  
-      	
-      	
+ 		m.addMarkerWithData(marker,{
+        			label : i.toString()the
+    		}); 
 	}
   }
 //]]>

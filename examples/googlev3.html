@@ -59,7 +59,9 @@
 
 		// add a marker
 		var marker = new mxn.Marker(latlon);
-		mapstraction.addMarker(marker,true);
+ 		mapstraction.addMarkerWithData(marker,{
+        			label : 'hello'
+    		}); 
 		
 	}
 
