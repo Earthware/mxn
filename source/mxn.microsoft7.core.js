@@ -130,7 +130,12 @@ Mapstraction: {
 		
 		// TODO: Add provider code
 	},
-
+/*
+	removeAllMarkers: function () {
+		var map = this.maps[this.api];
+		map.entities.clear();
+	},
+	*/
 	addPolyline: function(polyline, old) {
 		var map = this.maps[this.api];
 		var pl = polyline.toProprietary(this.api);
