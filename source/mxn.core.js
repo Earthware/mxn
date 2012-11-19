@@ -625,12 +625,18 @@ Mapstraction.prototype.removeMarker = function(marker) {
 
 /**
  * removeAllMarkers removes all the Markers on a map
+ * If there is no implementation of removeAllMarkers then do them one at a time 
  */
 Mapstraction.prototype.removeAllMarkers = function() {
-	var current_marker;
-	while(this.markers.length > 0) {
-		current_marker = this.markers.pop();
-		this.invoker.go('removeMarker', [current_marker]);
+	try {
+		this.invoker.go('removeAllMarkers', arguments);	
+		this.markers.length = 0;
+	} catch (x) {
+		var current_marker;
+		while(this.markers.length > 0) {
+			current_marker = this.markers.pop();
+			this.invoker.go('removeMarker', [current_marker]);
+		}
 	}
 };
 
