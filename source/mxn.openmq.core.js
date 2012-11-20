@@ -297,9 +297,13 @@ Marker: {
 	},
 
 	openBubble: function() {		
-		// TODO: Add provider code
+		this.proprietary_marker.toggleInfoWindow();
 	},
 
+	closeBubble: function() {
+		this.proprietary_marker.toggleInfoWindow();
+	},
+	
 	hide: function() {
 		// TODO: Add provider code
 	},
