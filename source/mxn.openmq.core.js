@@ -279,9 +279,7 @@ Marker: {
 	toProprietary: function() {
 		var pt = this.location.toProprietary(this.api);
 		var mk = new MQA.Poi(pt);
-		
-		this.open_bubble = false;
-		
+				
 		if (this.iconUrl) {
 			var icon = new MQA.Icon(this.iconUrl, this.iconSize[0], this.iconSize[1]);
 			mk.setIcon(icon);
@@ -299,21 +297,23 @@ Marker: {
 	},
 
 	openBubble: function() {
-		if (this.infoBubble) {
-			this.proprietary_marker.setInfoContentHTML(this.infoBubble);
-			if (!this.open_bubble) {
-				this.open_bubble = true;
-				this.proprietary_marker.toggleInfoWindow ();
-			}
-		}
-		// TODO: Add provider code
+		var prop = this.proprietary_marker;
+		prop.setInfoContentHTML(this.infoBubble);
+		if(!prop.infoWindow){
+			this.proprietary_marker.toggleInfoWindow();
+		} else {
+			//close
+		};
 	},
 
 	closeBubble: function() {
-		if (this.open_bubble) {
-			this.proprietary_marker.toggleInfoWindow ();
-			this.open_bubble = false;
-		}
+		var prop = this.proprietary_marker;
+		if(!prop.infoWindow){
+				//open
+		} else
+		{
+			this.proprietary_marker.toggleInfoWindow();
+		};
 	},
 	
 	hide: function() {
