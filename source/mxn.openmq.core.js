@@ -103,18 +103,18 @@ Mapstraction: {
 	},
 
 	addPolyline: function(polyline, old) {
-		var thisapi = this.api;
-		var map = this.maps[thisapi];
-		MQA.withModule('shapes', function() {
-			var pl = polyline.toProprietary(thisapi);
-			map.addShape(pl);
-		});
+		var map = this.maps[this.api];
+		var openmq_polyline = polyline.toProprietary(this.api);
+
+		map.addShape(openmq_polyline);
+		
+		return openmq_polyline;
 	},
 
 	removePolyline: function(polyline) {
 		var map = this.maps[this.api];
 		
-		// TODO: Add provider code
+		map.removeShape(polyline.proprietary_polyline);
 	},
 	
 	getCenter: function() {
@@ -280,6 +280,8 @@ Marker: {
 		var pt = this.location.toProprietary(this.api);
 		var mk = new MQA.Poi(pt);
 		
+		this.open_bubble = false;
+		
 		if (this.iconUrl) {
 			var icon = new MQA.Icon(this.iconUrl, this.iconSize[0], this.iconSize[1]);
 			mk.setIcon(icon);
@@ -296,12 +298,22 @@ Marker: {
 		return mk;
 	},
 
-	openBubble: function() {		
-		this.proprietary_marker.toggleInfoWindow();
+	openBubble: function() {
+		if (this.infoBubble) {
+			this.proprietary_marker.setInfoContentHTML(this.infoBubble);
+			if (!this.open_bubble) {
+				this.open_bubble = true;
+				this.proprietary_marker.toggleInfoWindow ();
+			}
+		}
+		// TODO: Add provider code
 	},
 
 	closeBubble: function() {
-		this.proprietary_marker.toggleInfoWindow();
+		if (this.open_bubble) {
+			this.proprietary_marker.toggleInfoWindow ();
+			this.open_bubble = false;
+		}
 	},
 	
 	hide: function() {
