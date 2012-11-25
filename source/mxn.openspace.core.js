@@ -3,6 +3,24 @@ mxn.register('openspace', {
 Mapstraction: {
 
 	init: function(element, api) {
+		//FIX STUPID OPENSPACE BUG IN openspace Version 1.2 - is triggered by Mapstraction Core Tests when adding a marker with label text
+		if (typeof (OpenLayers.Marker.prototype.setDragMode) == "undefined")
+		{
+			OpenLayers.Marker.prototype.setDragMode = function(mode) 
+			{
+				if (this.eventObj) {
+					if (mode) {
+						this.events.unregister("mousedown", this.eventObj, this.eventFunc);
+					} 
+					else {
+						if (this.events.listeners.mousedown.length == 0) {
+							this.events.register("mousedown", this.eventObj, this.eventFunc);
+						}
+					}
+				}
+			};
+		}
+	
 		var me = this;
 		// create the map with no controls and don't centre popup info window
 		this.maps[api] = new OpenSpace.Map(element,{
@@ -16,6 +34,7 @@ Mapstraction: {
 		this.maps[api].addControl(new OpenLayers.Control.KeyboardDefaults());
 		// include copyright statement
 		this.maps[api].addControl(new OpenSpace.Control.CopyrightCollection());
+		this.maps[api].addControl(new OpenSpace.Control.PoweredBy());
 		
 		this.maps[api].events.register(
 			"click", 
@@ -102,22 +121,19 @@ Mapstraction: {
 		else if (oszoom>10) {
 			oszoom = 10;
 		}
-		map.setCenter(pt, oszoom);
+		map.setCenter(pt, oszoom, false, false);
 	},
 	
 	addMarker: function(marker, old) {
 		var map = this.maps[this.api];
-		var pin = marker.toProprietary(this.api);
-	
-		map.addOverlay(pin);
-	
-		return pin;
+		var loc = marker.location.toProprietary(this.api);
+		var OSMarker = map.createMarker(loc, null, marker.labelText);	
+		return OSMarker;
 	},
 
 	removeMarker: function(marker) {
 		var map = this.maps[this.api];
-	
-		// TODO: Add provider code
+		map.removeMarker(marker.toProprietary(this.api))
 	},
 	
 	declutterMarkers: function(opts) {
@@ -130,7 +146,7 @@ Mapstraction: {
 		var map = this.maps[this.api];
 		var pl = polyline.toProprietary(this.api);
 
-		// TODO: Add provider code
+		map.addFeatures([pl]);
 
 		return pl;
 	},
@@ -138,30 +154,23 @@ Mapstraction: {
 	removePolyline: function(polyline) {
 		var map = this.maps[this.api];
 	
-		// TODO: Add provider code
+		var pl = polyline.toProprietary(this.api);
+
+		map.removeFeatures([pl]);
 	},
 	
 	getCenter: function() {
-		var point;
 		var map = this.maps[this.api];
-	
-		var pt = map.getCenter(); // an OpenSpace.MapPoint,
-							  // UK National Grid
-		point = new mxn.LatLonPoint();
-		point.fromOpenSpace(pt);  // convert to LatLonPoint
-	
-		return point;
+		var pt = map.getCenter(); // an OpenSpace.MapPoint, UK National Grid
+		var gridProjection = new OpenSpace.GridProjection();
+		var center = gridProjection.getLonLatFromMapPoint(pt);
+		return new mxn.LatLonPoint(center.lat, center.lon);
 	},
 
 	setCenter: function(point, options) {
 		var map = this.maps[this.api];
 		var pt = point.toProprietary(this.api);
-		if(options && options.pan) {
-			map.setCenter(pt.toProprietary(this.api));
-		}
-		else {
-			map.setCenter(pt.toProprietary(this.api));
-		}
+		map.setCenter(pt);
 	},
 	
 	setZoom: function(zoom) {
@@ -203,29 +212,12 @@ Mapstraction: {
 	},
 
 	setMapType: function(type) {
-		var map = this.maps[this.api];
-		switch(type) {
-		case mxn.Mapstraction.ROAD:
-			// TODO: Add provider code
-			break;
-		case mxn.Mapstraction.SATELLITE:
-			// TODO: Add provider code
-			break;
-		case mxn.Mapstraction.HYBRID:
-			// TODO: Add provider code
-			break;
-		default:
-			// TODO: Add provider code
-		}
+		//Road Only 
 	},
 
 	getMapType: function() {
-		var map = this.maps[this.api];
-	
-		// TODO: Add provider code
-		//return mxn.Mapstraction.ROAD;
-		//return mxn.Mapstraction.SATELLITE;
-		//return mxn.Mapstraction.HYBRID;
+		//Road Only
+		return mxn.Mapstraction.ROAD;
 	},
 
 	getBounds: function () {
@@ -237,10 +229,9 @@ Mapstraction: {
 		var ossw = new OpenSpace.MapPoint( olbox[0], olbox[1] );
 		var osne = new OpenSpace.MapPoint( olbox[2], olbox[3] );
 		// convert to LatLonPoints
-		var sw = new mxn.LatLonPoint();
-		sw.fromOpenSpace(ossw);
-		var ne = new mxn.LatLonPoint();
-		ne.fromOpenSpace(osne);
+		var gridProjection = new OpenSpace.GridProjection();
+		var sw = gridProjection.getLonLatFromMapPoint(ossw); 
+		var ne = gridProjection.getLonLatFromMapPoint(osne); 
 		return new mxn.BoundingBox(sw.lat, sw.lon, ne.lat, ne.lon);
 	},
 
@@ -324,9 +315,7 @@ LatLonPoint: {
 		var lonlat = new OpenLayers.LonLat(this.lon, this.lat);
 		// need to convert to UK national grid
 		var gridProjection = new OpenSpace.GridProjection();
-		return gridProjection.getMapPointFromLonLat(lonlat); 
-		// on OpenSpace.MapPoint
-	
+		return gridProjection.getMapPointFromLonLat(lonlat); //can we just pass this instead and not need lonlat?
 	},
 	
 	fromProprietary: function(osPoint) {
@@ -365,21 +354,20 @@ Marker: {
 		}
 		else { // leave at default OpenSpace icon
 		}
-	
-		// This requires an OpenLayers specific hack, doesn't work when
-		// not including OpenLayers.js
-		OpenLayers.Marker.Label(this.location.toProprietary(this.api), icon,
-				this.labelText, {mouseOver:true,tooltipsFormat:true});
 		
-		var marker = new OpenLayers.Marker(this.location.toProprietary(this.api), icon);
-		
+		marker = new OpenLayers.Marker(this.location.toProprietary(this.api), icon, this.labelText);
 		return marker;
 	},
 
 	openBubble: function() {
-		// TODO: Add provider code
+		//this.map.openInfoWindow(this.proprietary_marker.icon, this.location.toProprietary(this.api), this.labelText, new OpenLayers.Size(300,200));
 	},
 
+	closeBubble: function() {
+		this.map.closeInfoWindow();
+	},
+
+	
 	hide: function() {
 		// TODO: Add provider code
 	},

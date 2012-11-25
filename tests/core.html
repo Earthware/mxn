@@ -71,6 +71,7 @@
 
 			case 'openspace':
 				document.write('<script type="text/javascript" src="http://openspace.ordnancesurvey.co.uk/osmapapi/openspace.js?key=CEEFBE51588492CBE0405F0ACA6010B1"><\/script>');
+				document.write( '<script type="text/javascript" src="http://dev.openlayers.org/releases/OpenLayers-2.8/OpenLayers.js"><\/script>' );
 				break;
 				
 			case 'ovi':
@@ -107,7 +108,7 @@
 		
 		m = new mxn.Mapstraction('map', provider);
 		// So far this is only necessary for leaflet.
-		m.setCenterAndZoom(new mxn.LatLonPoint(37.4419, -122.1419), 10);
+		m.setCenterAndZoom(new mxn.LatLonPoint(52.4419, 0.1419), 10);
 
 		m.load.addHandler(function(sEvtName, oEvtSource, oEvtArgs){
 			eventsElm.innerHTML += 'Map has for provider: ' + oEvtSource.api + '<br/>';
@@ -150,13 +151,13 @@
 			{ 
 				desc: 'Center map', 
 				action: function(){
-					m.setCenterAndZoom(new mxn.LatLonPoint(37.4419, -122.1419), 10);
+					m.setCenterAndZoom(new mxn.LatLonPoint(52.4419, 0.1419), 10);
 				} 
 			},		 
 			{
 				desc: 'Pan map',
 				action: function(){
-					m.setCenter(new mxn.LatLonPoint(37.3419, -122.0419), {pan: true});
+					m.setCenter(new mxn.LatLonPoint(52.3419, 0.0419), {pan: true});
 				}
 			},
 			{
@@ -186,7 +187,7 @@
 			{
 				desc: 'Add marker',
 				action: function(){
-					var mkr = new mxn.Marker(new mxn.LatLonPoint(37.3419, -122.0419));
+					var mkr = new mxn.Marker(new mxn.LatLonPoint(52.3419, 0.0419));
 					mkr.setLabel('Some random place');
 					mkr.setInfoBubble('Some information about the random place');
 					mkr.click.addHandler(markerEventHandler);
@@ -210,7 +211,7 @@
 			{
 				desc: 'Add marker offscreen',
 				action: function(){
-					var mkr = new mxn.Marker(new mxn.LatLonPoint(37.3419, -117.0419));
+					var mkr = new mxn.Marker(new mxn.LatLonPoint(52.3419, 1.0419));
 					mkr.setLabel('Some other place');
 					m.addMarker(mkr);
 				}
@@ -225,10 +226,10 @@
 				desc: 'Add line',
 				action: function(){
 					var pl = new mxn.Polyline([
-						new mxn.LatLonPoint(37.3419, -122.0419),
-						new mxn.LatLonPoint(36.3419, -120.0419),
-						new mxn.LatLonPoint(38.3419, -119.0419),
-						new mxn.LatLonPoint(37.3419, -117.0419)
+						new mxn.LatLonPoint(52.3419, 1.0419),
+						new mxn.LatLonPoint(51.3419, 2.0419),
+						new mxn.LatLonPoint(52.3419, 2.0419),
+						new mxn.LatLonPoint(52.3419, 0.0419)
 					]);
 					pl.color = '#00DD55';
 					m.addPolyline(pl);
@@ -255,14 +256,13 @@
 					// m.setMapType("OSM");
 				}
 			},
-			*/			
+			*/		
 			{
 				desc: 'Swap API (yahoo)',
 				action: function(){
 					m.swap('map', 'yahoo');
 				}
 			},
-			
 			
 			
 			{ desc: 'Done.', action: function(){} }
