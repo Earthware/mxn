@@ -3,25 +3,10 @@ mxn.register('openspace', {
 Mapstraction: {
 
 	init: function(element, api) {
-		//FIX STUPID OPENSPACE BUG IN openspace Version 1.2 - is triggered by Mapstraction Core Tests when adding a marker with label text
-		if (typeof (OpenLayers.Marker.prototype.setDragMode) == "undefined")
-		{
-			OpenLayers.Marker.prototype.setDragMode = function(mode) 
-			{
-				if (this.eventObj) {
-					if (mode) {
-						this.events.unregister("mousedown", this.eventObj, this.eventFunc);
-					} 
-					else {
-						if (this.events.listeners.mousedown.length == 0) {
-							this.events.register("mousedown", this.eventObj, this.eventFunc);
-						}
-					}
-				}
-			};
-		}
-	
 		var me = this;
+		
+		if (typeof(OpenLayers) == "undefined") { throw 'OpenLayers not loaded, but is required to work with OpenSpace in mapstraction'};
+		
 		// create the map with no controls and don't centre popup info window
 		this.maps[api] = new OpenSpace.Map(element,{
 				controls: [],
