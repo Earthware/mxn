@@ -5,8 +5,6 @@ Mapstraction: {
 	init: function(element, api) {
 		var me = this;
 		
-		if (typeof(OpenLayers) == "undefined") { throw 'OpenLayers not loaded, but is required to work with OpenSpace in mapstraction'};
-		
 		// create the map with no controls and don't centre popup info window
 		this.maps[api] = new OpenSpace.Map(element,{
 				controls: [],
@@ -340,12 +338,12 @@ Marker: {
 		else { // leave at default OpenSpace icon
 		}
 		
-		marker = new OpenLayers.Marker(this.location.toProprietary(this.api), icon, this.labelText);
+		marker = new OpenLayers.Marker(this.location.toProprietary(this.api), icon, this.labelText, new OpenLayers.Size(300,100));
 		return marker;
 	},
 
 	openBubble: function() {
-		//this.map.openInfoWindow(this.proprietary_marker.icon, this.location.toProprietary(this.api), this.labelText, new OpenLayers.Size(300,200));
+		this.map.openInfoWindow(this.proprietary_marker.icon, this.location.toProprietary(this.api), this.labelText, new OpenLayers.Size(300,100));
 	},
 
 	closeBubble: function() {
