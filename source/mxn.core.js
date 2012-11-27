@@ -951,6 +951,9 @@ Mapstraction.prototype.addJSON = function(json) {
 				break;
 			case "Polygon":
 				var points = [];
+				 for (i = 0; i < item.geometry.coordinates[0].length; i++) {
+			        points.push(new LatLonPoint(item.geometry.coordinates[0][i][1], item.geometry.coordinates[0][i][0]));
+			    }
 				polyline = new Polyline(points);
 				mapstraction.addPolylineWithData(polyline,{
 					fillColor : item.poly_color,
@@ -1770,7 +1773,8 @@ Polyline.prototype.addData = function(options){
 					this.setOpacity(options.opacity);
 					break;
 				case 'closed':
-					this.setClosed(options.closed);
+				case 'polygon':
+					this.setClosed(options.closed || options.polygon);
 					break;
 				case 'fillColor':
 					this.setFillColor(options.fillColor);
