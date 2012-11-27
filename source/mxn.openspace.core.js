@@ -344,6 +344,7 @@ Marker: {
 
 	openBubble: function() {
 		this.map.openInfoWindow(this.proprietary_marker.icon, this.location.toProprietary(this.api), this.labelText, new OpenLayers.Size(300,100));
+		this.map.infoWindow.autoSize = true;
 	},
 
 	closeBubble: function() {
@@ -352,11 +353,11 @@ Marker: {
 
 	
 	hide: function() {
-		// TODO: Add provider code
+		this.proprietary_marker.display(false);
 	},
 	
 	show: function() {
-		// TODO: Add provider code
+		this.proprietary_marker.display(true);
 	},
 	
 	update: function() {
