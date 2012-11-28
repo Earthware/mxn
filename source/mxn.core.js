@@ -962,7 +962,7 @@ Mapstraction.prototype.addJSON = function(json) {
 					width : item.line_width,
 					opacity : item.line_opacity,
 					color : item.line_color,
-					polygon : true
+					closed : points[points.length-1].equals(points[0]) //first point = last point in the polygon so its closed
 				});
 				markers.push(polyline);
 				break;
@@ -1773,8 +1773,7 @@ Polyline.prototype.addData = function(options){
 					this.setOpacity(options.opacity);
 					break;
 				case 'closed':
-				case 'polygon':
-					this.setClosed(options.closed || options.polygon);
+					this.setClosed(options.closed);
 					break;
 				case 'fillColor':
 					this.setFillColor(options.fillColor);
