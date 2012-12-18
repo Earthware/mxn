@@ -486,7 +486,6 @@ mxn.register('openlayers', {
 					this.tileLayers[f][1].setVisibility(this.tileLayers[f][2]);
 				}
 			}	   
-			// TODO: Add provider code
 		},
 
 		getPixelRatio: function() {
