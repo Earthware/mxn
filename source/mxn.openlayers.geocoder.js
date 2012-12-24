@@ -92,7 +92,7 @@ Geocoder: {
 				{this.callback(places[0]);}
 			else
 				{
-					places.length = rowlimit - 1;
+					places.length = rowlimit;
 					this.callback(places);
 				}
 		}
