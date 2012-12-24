@@ -91,7 +91,10 @@ Geocoder: {
 			if (rowlimit <= 1)
 				{this.callback(places[0]);}
 			else
-				{this.callback(places.slice(0,rowlimit));}
+				{
+					places.length = rowlimit - 1;
+					this.callback(places);
+				}
 		}
 	}
 }
