@@ -4,9 +4,9 @@ mxn.register('microsoft7', {
 		init: function(){
 
 		},
-
-		geocode: function(query){
-			var self = this;
+		row_limit: int = 1,
+		geocode: function(query, rowlimit) {
+			this.row_limit = rowlimit || 1; //default to one result 			
 			var _address = '';
 			var is_reverse = false;
 			if (typeof(query) == 'object') {
@@ -36,16 +36,32 @@ mxn.register('microsoft7', {
 				this.error_callback(results.statusDescription);
 			}
 			else {
-				var topResult = results.resourceSets[0].resources[0];
-				var return_location = topResult ? {
-					street: topResult.address.addressLine,
-					locality: topResult.address.locality,
-					postcode: topResult.address.postalCode,
-					region: topResult.address.adminDistrict,
-					country: topResult.address.countryRegion,
-					point: new mxn.LatLonPoint(topResult.point.coordinates[0], topResult.point.coordinates[1])			
-				} : null;
-				this.callback(return_location);
+			
+				var places = [];
+				
+				for (i=0; i<results.resourceSets[0].resources.length; i++)
+				{
+					place = results.resourceSets[0].resources[i];
+				
+					var return_location = {
+						street: place.address.addressLine,
+						locality: place.address.locality,
+						postcode: place.address.postalCode,
+						region: place.address.adminDistrict,
+						country: place.address.countryRegion,
+						point: new mxn.LatLonPoint(place.point.coordinates[0], place.point.coordinates[1])			
+					};
+					
+					places.push(return_location);
+				}
+				
+				if (this.row_limit <= 1)
+					{this.callback(places[0]);}
+				else
+					{
+						places.length = this.row_limit;
+						this.callback(places);		
+				}
 			}
 		}
 	}
