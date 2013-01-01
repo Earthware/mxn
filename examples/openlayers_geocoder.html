@@ -17,15 +17,22 @@
 	var geocoder;
 
 	function geocode_return(geocoded_locations) {
-		
-		// display the map centered on a latitude and longitude (Google zoom levels)
-		//mapstraction.setCenterAndZoom(geocoded_location.point, 10);
-		
+		if (typeof(geocoded_locations.point) == "object") //ie we only got 1 result back the way it used to work
+		{
+			geocoded_locations_array = {};
+			geocoded_locations_array[0] = geocoded_locations;
+			geocoded_locations = geocoded_locations_array;
+			geocoded_locations.length = 1;
+		}
+	
+		mapstraction.removeAllMarkers();
 		for (i=0; i<geocoded_locations.length; i++)
 		{
 			// create a marker positioned at a lat/lon
 			var geocode_marker = new mxn.Marker(geocoded_locations[i].point);
 			geocode_marker.setIcon('http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=' + i + '|FF1CAE|000000');
+			geocode_marker.setIconSize([21,34]);
+			geocode_marker.setIconAnchor([11,34]);
 			var address = geocoded_locations[i].locality + ", " + geocoded_locations[i].region + ", " + geocoded_locations[i].country;
 			geocode_marker.setInfoBubble(address);
 			
@@ -62,7 +69,8 @@
 	function user_submit() {
 		var address = {};
 		address.address = document.getElementById('address').value;
-		geocoder.geocode(address,4);
+		var limit = document.getElementById('limit').value;
+		geocoder.geocode(address, limit);
 	}
 	
 	
@@ -80,6 +88,8 @@
 				<td>
 					<input type="text" id="address" name="address" value="brest" size="35"/>
 					<a href="#" onclick="user_submit(); return false;">Geocode</a>
+					but limit the number of results to: 
+					<input type="text" id="limit" name="limit" value="3" size="1"/>
 				</td>
 			</tr>
 		</table>

@@ -59,7 +59,7 @@ mxn.register('microsoft7', {
 					{this.callback(places[0]);}
 				else
 					{
-						places.length = this.row_limit;
+						if (places.length > this.row_limit) {places.length = this.row_limit;}					
 						this.callback(places);		
 				}
 			}
