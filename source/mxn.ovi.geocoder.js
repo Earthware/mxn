@@ -19,9 +19,9 @@ Geocoder: {
 		this.geocoders[this.api] = ovi_geocoder;
 	},
 	
-	geocode: function(address){
+	geocode: function(address, rowlimit){
 		var ovi_geocoder = this.geocoders[this.api];
-		
+		this.row_limit = rowlimit || 1; //default to one result 	
 		ovi_geocoder.geocode(address);
 	},
 	
@@ -50,20 +50,26 @@ Geocoder: {
 		}
 		
 		else if (status == "finished") {
-			var return_location = {};
-			var street_components = [];
-			var locality_components = [];
-			var region_components = [];
+		
+			var places = [];
+		
+			for (i=0; i<response.length; i++)
+			{
+				place = response[i];
+		
+				var return_location = {};
+				var street_components = [];
+				var locality_components = [];
+				var region_components = [];
 
-			return_location.street = '';
-			return_location.locality = '';
-			return_location.postcode = '';
-			return_location.region = '';
-			return_location.country = '';
+				return_location.street = '';
+				return_location.locality = '';
+				return_location.postcode = '';
+				return_location.region = '';
+				return_location.country = '';
 
-			if (response.length > 0) {
-				var address = response[0].address;
-				var coords = response[0].displayPosition;
+				var address = place.address;
+				var coords = place.displayPosition;
 
 				if (address.street) {
 					street_components.push(address.street);
@@ -105,9 +111,18 @@ Geocoder: {
 				}
 
 				return_location.point = new mxn.LatLonPoint(coords.latitude, coords.longitude);
-				this.callback(return_location);
+				
+				places.push(return_location);
+			}
+			
+			if (this.row_limit <= 1)
+				{this.callback(places[0]);}
+			else
+				{
+					if (places.length > this.row_limit) {places.length = this.row_limit;}
+					this.callback(places);
+				}
 			}
 		}
 	}
-}
 });
