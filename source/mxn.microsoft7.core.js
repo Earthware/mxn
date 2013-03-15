@@ -84,12 +84,8 @@ Mapstraction: {
 		var map = this.maps[this.api];
 		
 		var myOptions = map.getOptions();
-		if (!this.options.enableDragging) {
-			myOptions.disablePanning = true;
-		} 
-		if (!this.options.enableScrollWheelZoom) {
-			myOptions.disableZooming = true;
-		} 
+		myOptions.disablePanning = !this.options.enableDragging;
+		myOptions.disableZooming = !this.options.enableScrollWheelZoom;
 		map.setOptions(myOptions);
 	},
 
