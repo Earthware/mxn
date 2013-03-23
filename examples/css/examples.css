@@ -32,3 +32,11 @@ html, body, #map {
 	margin-top: 1px;
 	border: none;
 }
+
+#map .htmlPushPin {
+	background:url('http://leafletjs.com/dist/images/marker-icon@2x.png') no-repeat;
+	height: 80px;
+	width: 50px;
+	line-height: 50px;
+	text-align: center;
+}

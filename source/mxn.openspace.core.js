@@ -260,7 +260,11 @@ Mapstraction: {
 		var map = this.maps[this.api];
 		var loc = marker.location.toProprietary(this.api);
 		var pin = map.createMarker(loc, null, marker.labelText);
-	
+
+		if (marker.htmlContent) {
+		    pin.icon.imageDiv.innerHTML = marker.htmlContent;
+		}	
+		
 		return pin;
 	},
 
