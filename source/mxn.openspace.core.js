@@ -77,11 +77,25 @@ Mapstraction: {
 		this.loaded[api] = true;
 	},
 	
-	applyOptions: function(){
-		var map = this.maps[this.api];
-	
-		// TODO: Add provider code
-	},
+		applyOptions: function(){
+			var map = this.maps[this.api],
+				navigators = map.getControlsByClass( 'OpenLayers.Control.Navigation' ),
+				navigator;
+
+			if ( navigators.length > 0 ) {
+				navigator = navigators[0];
+				if ( this.options.enableScrollWheelZoom ) {
+					navigator.enableZoomWheel();
+				} else {
+					navigator.disableZoomWheel();
+				}
+				if ( this.options.enableDragging ) {
+					navigator.activate();
+				} else {
+					navigator.deactivate();
+				}
+			}
+		},
 	
 	resizeTo: function(width, height){
 		this.currentElement.style.width = width;
